@@ -1,0 +1,41 @@
+{
+  "name": "front_pet",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.2",
+    "@mui/lab": "^5.0.0-alpha.158",
+    "@mui/material": "^5.15.2",
+    "@mui/x-data-grid": "^6.18.6",
+    "@mui/x-data-grid-generator": "^6.18.6",
+    "axios": "^1.6.3",
+    "chart.js": "^4.4.1",
+    "cookies-next": "^4.1.0",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "next": "13.5.6",
+    "react": "^18",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18",
+    "react-quill": "^2.0.0",
+    "react-toastify": "^9.1.3",
+    "sass": "^1.69.6",
+    "sweetalert2": "^11.10.2",
+    "swiper": "^11.0.5",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
