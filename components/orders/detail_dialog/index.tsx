@@ -12,7 +12,7 @@ import { numberWithComma } from "@/utils/numberWithComma";
 type Props = {
   openDetail: boolean;
   handleCloseDetail: () => void;
-  dataDetail: any;
+  dataDetail: any[];
 };
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -29,12 +29,7 @@ export default function DetailDialog({
   openDetail,
   dataDetail,
 }: Props) {
-  const imageUrlStringWithoutQuotes = dataDetail?.images?.replace(
-    /^"(.*)"$/,
-    "$1"
-  );
-  const firstImage = imageUrlStringWithoutQuotes?.split(",")[0];
-  React.useEffect(() => {}, [dataDetail]);
+  React.useMemo(() => {}, [dataDetail]);
 
   return (
     <React.Fragment>
@@ -61,17 +56,30 @@ export default function DetailDialog({
         </IconButton>
         <DialogContent dividers>
           <Box sx={{ width: 700 }}>
-            <Stack flexDirection={"row"} gap={3}>
-              <img src={firstImage} style={{ width: 150, height: 150 }} />
-              <Box>
-                <Typography>{dataDetail.title}</Typography>
-                <Typography>Price: {dataDetail.price}</Typography>
-                <Typography>Qty: {dataDetail.qty}</Typography>
-                <Typography variant='h6' fontWeight={700}>
-                  Total: {numberWithComma(dataDetail.price * dataDetail.qty)}
-                </Typography>
-              </Box>
-            </Stack>
+            <Typography variant='h6' fontWeight={700} align='right'>
+              Total:{" "}
+              {dataDetail.reduce((acc, val) => {
+                const total = val.qty * val.product.price;
+                return acc + total;
+              }, 0)}{" "}
+              $
+            </Typography>
+            {dataDetail.map((item) => (
+              <Stack flexDirection={"row"} gap={3} key={item.orderId}>
+                <img
+                  src={JSON.parse(item.product.images).split(",")[0]}
+                  style={{ width: 150, height: 150 }}
+                />
+                <Box>
+                  <Typography>{item.product.title}</Typography>
+                  <Typography>Price: {item.product.price}</Typography>
+                  <Typography>Qty: {item.qty}</Typography>
+                  <Typography variant='h6' fontWeight={500}>
+                    subtotal: {numberWithComma(item.product.price * item.qty)}
+                  </Typography>
+                </Box>
+              </Stack>
+            ))}
           </Box>
         </DialogContent>
       </BootstrapDialog>

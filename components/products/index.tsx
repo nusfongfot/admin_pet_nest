@@ -180,9 +180,15 @@ export default function ProductsComponent({}: Props) {
                 >
                   {`$ ${item.price}`}
                 </Typography>
+                <Typography color={"rgba(0,0,0,.5)"}>
+                  {`Salable ${item?.sold?.reduce(
+                    (acc: any, val: any) => acc + val.qty,
+                    0
+                  )}`}
+                </Typography>
                 <Typography
                   color={"rgba(0,0,0,.5)"}
-                >{`salable ${item?.orders?.length}`}</Typography>
+                >{`Qty ${item.qty}`}</Typography>
               </CardContent>
               <CardActions>
                 <Button
@@ -209,6 +215,8 @@ export default function ProductsComponent({}: Props) {
         ))}
       </Grid>
       <CustomProductDialog
+        products={products}
+        setProducts={setProducts}
         openProduct={openProduct}
         handleCloseProduct={handleCloseProduct}
         product={product}

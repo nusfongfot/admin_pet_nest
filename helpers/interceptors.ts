@@ -9,14 +9,14 @@ const apiFetch = axios.create({
 // Before Send Request
 apiFetch.interceptors.request.use(
   (request) => {
-    const { token } = getCookies("token" as any) || "";
-    request.headers["x-access-token"] = token;
+    const { tokenAdmin } = getCookies("tokenAdmin" as any) || "";
+    request.headers["x-access-token"] = tokenAdmin;
     request.headers["x-platform"] = "WEB";
     request.headers["Accept-Language"] = "TH";
     request.headers["Content-Type"] = "application/json";
     request.headers["Content-Type"] = "application/x-www-form-urlencoded";
     request.headers["x-access-login-application"] = "WEB";
-    request.headers.Authorization = `Bearer ${token}`;
+    request.headers.Authorization = `Bearer ${tokenAdmin}`;
     return request;
   },
   (error) => {
@@ -29,7 +29,7 @@ apiFetch.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  (error) => {    
     return errorToast(error.response.data.message[0], 2000);
   }
 );

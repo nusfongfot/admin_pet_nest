@@ -12,7 +12,7 @@ import { Box, MenuItem, Stack, TextField } from "@mui/material";
 import { errorToast, successToast } from "@/utils/notification";
 import { uploadImages } from "@/api/upload";
 import { createProduct, editProduct } from "@/api/product";
-import { getCategory } from "@/api/category";
+import { createCategory, getCategory } from "@/api/category";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const ReactQuill =
@@ -23,7 +23,9 @@ type Props = {
   handleCloseProduct: () => void;
   product: any;
   isEdit: boolean;
+  products: any[];
   setIsCreate: React.Dispatch<React.SetStateAction<boolean>>;
+  setProducts: React.Dispatch<React.SetStateAction<any[]>>;
 };
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -49,6 +51,8 @@ export default function CustomProductDialog({
   product,
   isEdit,
   setIsCreate,
+  products,
+  setProducts,
 }: Props) {
   const refInputFile = React.useRef<HTMLInputElement>(null);
   const [isLoding, setIsLoading] = React.useState<boolean>(false);
@@ -66,6 +70,7 @@ export default function CustomProductDialog({
     brand: "",
     cate: "",
   });
+  const [cateVal, setCateVal] = React.useState<string>("");
 
   const handleChangeValues = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -97,7 +102,6 @@ export default function CustomProductDialog({
         }
         setImages([...images, ...selectedFiles]);
       }
-      console.log("length", selectedFiles);
     }
   };
 
@@ -133,21 +137,33 @@ export default function CustomProductDialog({
         title: values.title,
         price: values.price,
         qty: values.qty,
-        category: values.cate,
+        category: isAdd ? await handleCreateCategory() : values.cate,
         description: valueQill,
         brand: values.brand,
         images: await handleUploadImageAPI(),
       };
+
       const res = await createProduct(body);
-      successToast(res.message, 1500);
-      setIsCreate(true);
-      handleCloseProduct();
+      if (res.data) {
+        setProducts([res.data, ...products]);
+        successToast(res.message, 1500);
+        setIsCreate(true);
+        handleCloseProduct();
+      }
     } catch (error: any) {
       return error;
     } finally {
       setIsLoading(false);
       resetFileInput();
       setImages([]);
+      setValues({
+        title: "",
+        price: "",
+        qty: "",
+        brand: "",
+        cate: "",
+      });
+      setValueQill("");
     }
   };
 
@@ -172,9 +188,28 @@ export default function CustomProductDialog({
       setIsLoading(false);
       resetFileInput();
       setImages([]);
+      setValues({
+        title: "",
+        price: "",
+        qty: "",
+        brand: "",
+        cate: "",
+      });
+      setValueQill("");
     }
   };
 
+  const handleCreateCategory = async () => {
+    try {
+      const body = {
+        title: cateVal,
+      };
+      const res = await createCategory(body);
+      return res.data.title;
+    } catch (error) {
+      return error;
+    }
+  };
   React.useEffect(() => {
     (async () => {
       try {
@@ -192,13 +227,13 @@ export default function CustomProductDialog({
     })();
   }, []);
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (images?.length == 0) {
       resetFileInput();
     }
   }, [images]);
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (isEdit) {
       setValues({
         title: product?.title,
@@ -219,7 +254,18 @@ export default function CustomProductDialog({
       });
       setValueQill("");
     }
-  }, [product, isEdit]);
+
+    if (!openProduct) {
+      setValues({
+        title: "",
+        qty: "",
+        price: "",
+        cate: "",
+        brand: "",
+      });
+      setValueQill("");
+    }
+  }, [product, isEdit, openProduct]);
 
   return (
     <React.Fragment>
@@ -294,7 +340,12 @@ export default function CustomProductDialog({
 
             <Typography>Category</Typography>
             {isAdd ? (
-              <TextField size='small' fullWidth />
+              <TextField
+                size='small'
+                fullWidth
+                value={cateVal}
+                onChange={(e) => setCateVal(e.target.value)}
+              />
             ) : (
               <TextField
                 id='outlined-select-currency'

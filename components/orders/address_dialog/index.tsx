@@ -6,7 +6,8 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import { Box, Stack, Tooltip } from "@mui/material";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 type Props = {
   openAddress: boolean;
@@ -28,7 +29,10 @@ export default function AddressDialog({
   openAddress,
   dataAddress,
 }: Props) {
-  React.useEffect(() => {}, [dataAddress]);
+  const [isCopy, setisCopy] = React.useState(false);
+  React.useMemo(() => {
+    setisCopy(false);
+  }, [dataAddress]);
 
   return (
     <React.Fragment>
@@ -55,6 +59,24 @@ export default function AddressDialog({
         </IconButton>
         <DialogContent dividers>
           <Box sx={{ width: 700 }}>
+            <Stack flexDirection={"row"} justifyContent={"flex-end"}>
+              <Tooltip title={isCopy ? "copied" : "copy"}>
+                <IconButton>
+                  <ContentPasteIcon
+                    sx={{ cursor: "pointer", fontSize: 20 }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `Name: ${dataAddress?.user?.name} (${dataAddress?.address?.phone})  
+${dataAddress?.address?.houseNo} ${dataAddress?.address?.road} ${dataAddress?.address?.tambon} ${dataAddress?.address?.amphoe} ${dataAddress?.address?.province} ${dataAddress?.address?.zipcode}
+Details: ${dataAddress?.address?.detail}                                       
+                    `
+                      );
+                      setisCopy(true);
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            </Stack>
             <Typography variant='h6'>
               {`Name: ${dataAddress?.user?.name} (${dataAddress?.address?.phone})`}
             </Typography>

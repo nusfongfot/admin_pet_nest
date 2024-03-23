@@ -13,30 +13,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
-import { errorToast } from "@/utils/notification";
 import { login } from "@/api/auth";
 import { setCookie } from "cookies-next";
 import { useLoading } from "@/zustand/loading";
+import { errorToast } from "@/utils/notification";
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color='inherit' href='https://mui.com/'>
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Home() {
@@ -55,7 +36,9 @@ export default function Home() {
       const res = await login(body);
       if (res.data) {
         router.push("/dashboard?subpath=dashboard");
-        setCookie("token", res.token);
+        setCookie("tokenAdmin", res.token);
+      } else {
+        errorToast(res.message, 2000);
       }
     } catch (error) {
       return error;
@@ -127,10 +110,7 @@ export default function Home() {
                 id='password'
                 autoComplete='current-password'
               />
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Remember me'
-              />
+
               <Button
                 type='submit'
                 fullWidth
@@ -140,18 +120,12 @@ export default function Home() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href='#' variant='body2'>
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href='#' variant='body2'>
+                  <Link href='/signup' variant='body2'>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

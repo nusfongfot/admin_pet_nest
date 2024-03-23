@@ -133,7 +133,7 @@ export default function Dashboard() {
   };
 
   const handleLogOut = () => {
-    deleteCookie("token");
+    deleteCookie("tokenAdmin");
     window.location.replace("/");
   };
   return (

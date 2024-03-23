@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 type Props = {
   openSlip: boolean;
@@ -57,7 +57,15 @@ export default function SlipDialog({
         </IconButton>
         <DialogContent dividers>
           <Box sx={{ width: 500 }}>
-            <img src={dataSlip.slip} style={{ width: 400, height: 400 }} />
+            <Stack
+              flexDirection={"row"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              mt={2}
+              mb={2}
+            >
+              <img src={dataSlip.slip} style={{ width: 500, height: 500 }} />
+            </Stack>
           </Box>
         </DialogContent>
       </BootstrapDialog>

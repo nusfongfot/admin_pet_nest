@@ -1,30 +1,37 @@
 import { Typography } from "@mui/material";
 import DataGridServices from "../service-ui/datagrid";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAllUsers } from "@/api/user";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
 
 type Props = {};
 
 export default function CustomerComponent({}: Props) {
+  const [rows, setRows] = useState<any[]>([]);
   const columns = [
     {
-      field: "orderId",
+      field: "userId",
       headerName: "Customer ID",
-      width: 300,
+      // width: 310,
+      flex:1,
       align: "center",
       headerAlign: "center",
       sortable: true,
     },
 
     {
-      field: "orderDate",
+      field: "createdAt",
       headerName: "Join Date",
       align: "center",
       headerAlign: "center",
-      width: 300,
+      // width: 310,
+      flex:1,
       sortable: true,
       renderCell: (params: any) => (
         <>
-          <Typography>{params.value}</Typography>
+          <Typography>{dayjs(params.value).format("LLL")}</Typography>
         </>
       ),
     },
@@ -33,7 +40,8 @@ export default function CustomerComponent({}: Props) {
       headerName: "Customer Name",
       align: "center",
       headerAlign: "center",
-      width: 250,
+      // width: 310,
+      flex:1,
       sortable: true,
       renderCell: (params: any) => (
         <>
@@ -47,53 +55,28 @@ export default function CustomerComponent({}: Props) {
       headerName: "Location",
       align: "center",
       headerAlign: "center",
-      width: 300,
+      // width: 310,
+      flex:1,
       sortable: true,
       renderCell: (params: any) => (
         <>
-          <Typography>{params.value}</Typography>
-        </>
-      ),
-    },
-    {
-      field: "totalSpent",
-      headerName: "Total Spent",
-      align: "center",
-      headerAlign: "center",
-      width: 300,
-      sortable: true,
-      renderCell: (params: any) => (
-        <>
-          <Typography>{params.value}</Typography>
+          <Typography>{params?.row?.address[0]?.province}</Typography>
         </>
       ),
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      orderId: "#123451AAECD",
-      name: "Sophon Markmee",
-      price: 40.0,
-      qty: 5,
-      orderDate: "18/01/2567 18:50PM",
-      status: "Pending",
-      location: "Mahasarakham",
-      totalSpent: "$100",
-    },
-    {
-      id: 2,
-      orderId: "#123456",
-      name: "Valhein Darkness",
-      price: 300.0,
-      qty: 10,
-      orderDate: "18/01/2567 20:50PM",
-      status: "Success",
-      location: "Bangkok",
-      totalSpent: "$300",
-    },
-  ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getAllUsers();
+        setRows(res.data);
+      } catch (error) {
+        return error;
+      }
+    })();
+  }, []);
+
   return (
     <div>
       <DataGridServices columns={columns} rows={rows} />
