@@ -11,6 +11,10 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+type Props = {
+  lineGraph: any[];
+};
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -29,31 +33,24 @@ export const options = {
     },
     title: {
       display: true,
-    //   text: "Chart.js Line Chart",
+      //   text: "Chart.js Line Chart",
     },
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labels = ["Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat"];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [1, 2, 3, 4, 5],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [10, 20, 30, 40, 50],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
-
-export function MyLineChart() {
+export function MyLineChart({ lineGraph }: Props) {
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Revenue of week ($)",
+        data: lineGraph,
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
   return <Line options={options} data={data} />;
 }

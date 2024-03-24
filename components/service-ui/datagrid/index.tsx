@@ -81,7 +81,7 @@ function CustomNoRowsOverlay() {
 
 export default function DataGridServices({ columns, rows }: Props) {
   return (
-    <div style={{ height: 500, width: "100%" }}>
+    <div style={{ height: 550, width: "100%" }}>
       <DataGrid
         rowHeight={130}
         sx={{

@@ -33,7 +33,7 @@ export default function AddressDialog({
   React.useMemo(() => {
     setisCopy(false);
   }, [dataAddress]);
-
+  console.log("dataAddress", dataAddress);
   return (
     <React.Fragment>
       <BootstrapDialog

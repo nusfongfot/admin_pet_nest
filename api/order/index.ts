@@ -11,3 +11,21 @@ export const updateStatusOrder = async (id: string, body: object) => {
   const { data } = await apiFetch.put(link, body);
   return data;
 };
+
+export const getRevenueCurrentWeek = async () => {
+  const link = "/order/revenue/week";
+  const { data } = await apiFetch.get(link);
+  return data;
+};
+
+export const getRevenueTotal = async () => {
+  const link = "/order/revenue/all";
+  const { data } = await apiFetch.get(link);
+  return data;
+};
+
+export const getRevenueOfMonth = async () => {
+  const link = "/order/revenue/month";
+  const { data } = await apiFetch.get(link);
+  return data;
+};
