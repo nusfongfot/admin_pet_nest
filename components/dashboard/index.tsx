@@ -24,17 +24,17 @@ export default function DashBoardComponent({}: Props) {
   React.useEffect(() => {
     (async () => {
       try {
-        const res = await getRevenueCurrentWeek();
+        const revenueWeek = await getRevenueCurrentWeek();
         const revenueMonth = await getRevenueOfMonth();
         const revenueTotal = await getRevenueTotal();
         const users = await getAllUsers();
         const orders = await getAllOrders();
-
+        
         setBarGraph(revenueMonth.data);
         setTotalUsers(users.data.length);
         setTotalOders(orders.data.length);
         setTotalRevenue(revenueTotal.data);
-        setLineGraph(res.data);
+        setLineGraph(revenueWeek.data);
       } catch (error) {
         return error;
       }
